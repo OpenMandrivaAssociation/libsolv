@@ -1,25 +1,14 @@
---- libsolv/bindings/python/CMakeLists.txt.omv~	2013-06-19 20:15:08.940567025 +0200
-+++ libsolv/bindings/python/CMakeLists.txt	2013-06-19 20:16:34.084502579 +0200
-@@ -17,7 +17,7 @@ INCLUDE_DIRECTORIES (${PYTHON_INCLUDE_PA
- 
- ADD_LIBRARY (bindings_python SHARED solv_python.c)
- SET_TARGET_PROPERTIES (bindings_python PROPERTIES PREFIX "" OUTPUT_NAME "_solv")
--TARGET_LINK_LIBRARIES (bindings_python libsolvext libsolv ${SYSTEM_LIBRARIES})
-+TARGET_LINK_LIBRARIES (bindings_python libsolvext libsolv ${SYSTEM_LIBRARIES} -lpython2.7)
- 
- INSTALL (TARGETS bindings_python LIBRARY DESTINATION ${PYTHON_INSTALL_DIR})
- INSTALL (FILES ${CMAKE_CURRENT_BINARY_DIR}/solv.py DESTINATION ${PYTHON_INSTALL_DIR})
---- libsolv/CMakeLists.txt.omv~	2013-06-19 20:10:42.412899079 +0200
-+++ libsolv/CMakeLists.txt	2013-06-19 20:12:33.372511893 +0200
+--- libsolv/CMakeLists.txt.0000~	2014-01-09 13:29:48.000000000 +0100
++++ libsolv/CMakeLists.txt	2014-01-10 13:03:26.482767098 +0100
 @@ -11,6 +11,7 @@ OPTION (ENABLE_RUBY "Build the ruby bind
  
  OPTION (USE_VENDORDIRS "Install the bindings in vendor directories?" OFF)
  
 +OPTION (ENABLE_RPM5 "Build with rpm 5.x support?" OFF)
  OPTION (ENABLE_RPMDB "Build with rpm database support?" OFF)
- OPTION (ENABLE_RPMDB_PUBKEY "Build with rpmdb pubkey support?" OFF)
+ OPTION (ENABLE_PUBKEY "Build with pubkey support?" OFF)
  OPTION (ENABLE_RPMDB_BYRPMHEADER "Build with rpmdb Header support?" OFF)
-@@ -139,7 +140,7 @@ IF (ENABLE_BZIP2_COMPRESSION)
+@@ -141,7 +142,7 @@ IF (ENABLE_BZIP2_COMPRESSION)
  FIND_PACKAGE (BZip2 REQUIRED)
  ENDIF (ENABLE_BZIP2_COMPRESSION)
  
@@ -28,7 +17,7 @@
  MESSAGE (STATUS "Enabling RPM 5 support")
  ADD_DEFINITIONS (-DRPM5)
  SET (ENABLE_RPMDB ON)
-@@ -147,7 +148,7 @@ SET (ENABLE_RPMMD ON)
+@@ -149,7 +150,7 @@ SET (ENABLE_RPMMD ON)
  FIND_PACKAGE (PkgConfig REQUIRED)
  PKG_CHECK_MODULES (RPM REQUIRED rpm)
  INCLUDE_DIRECTORIES (${RPM_INCLUDE_DIRS})
@@ -37,7 +26,7 @@
  
  IF (MULTI_SEMANTICS)
  MESSAGE (STATUS "Enabling multi dist support")
-@@ -167,12 +168,12 @@ IF (ENABLE_RPMDB)
+@@ -169,12 +170,12 @@ IF (ENABLE_RPMDB)
      SET(RPMDB_LIBRARY ${RPMIO_LIBRARY} ${RPMDB_LIBRARY})
    ENDIF (RPMIO_LIBRARY)
  
@@ -52,3 +41,14 @@
  
    # check if rpm contains a bundled berkeley db
    CHECK_INCLUDE_FILE(rpm/db.h HAVE_RPM_DB_H)
+--- libsolv/bindings/python/CMakeLists.txt.0000~	2014-01-09 13:29:48.000000000 +0100
++++ libsolv/bindings/python/CMakeLists.txt	2014-01-10 13:02:56.226100034 +0100
+@@ -24,7 +24,7 @@ INCLUDE_DIRECTORIES (${PYTHON_INCLUDE_PA
+ 
+ ADD_LIBRARY (bindings_python SHARED solv_python.c)
+ SET_TARGET_PROPERTIES (bindings_python PROPERTIES PREFIX "" OUTPUT_NAME "_solv")
+-TARGET_LINK_LIBRARIES (bindings_python libsolvext libsolv ${SYSTEM_LIBRARIES})
++TARGET_LINK_LIBRARIES (bindings_python libsolvext libsolv ${SYSTEM_LIBRARIES} -lpython2.7)
+ 
+ INSTALL (TARGETS bindings_python LIBRARY DESTINATION ${PYTHON_INSTALL_DIR})
+ INSTALL (FILES ${CMAKE_CURRENT_BINARY_DIR}/solv.py DESTINATION ${PYTHON_INSTALL_DIR})

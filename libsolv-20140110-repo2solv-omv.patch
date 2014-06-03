@@ -1,0 +1,45 @@
+--- libsolv/tools/repo2solv.sh.omv~	2014-01-10 22:02:51.973191849 +0100
++++ libsolv/tools/repo2solv.sh	2014-01-10 22:17:46.619870257 +0100
+@@ -80,6 +80,24 @@ susetags_findfile_cat() {
+   fi
+ }
+ 
++omv_cat() {
++  if test -e "$1.cz" ; then
++    # synthesis.hdlist.cz and friends can be compressed with anything...
++    local FT=`LC_ALL=C file "$1.cz"`
++    if echo $FT | grep -q gzip; then
++      gzip -dc "$1.cz"
++    elif echo $FT | grep -q XZ; then
++      xz -dc "$1.cz"
++    elif echo $FT | grep -q bzip2; then
++      bzip2 -dc "$1.cz"
++    elif echo $FT | grep -q LZMA; then
++      lzma -dc "$1.cz"
++    elif echo $FT | grep -q lzip; then
++      lzip -dc "$1.cz"
++    fi
++  fi
++}
++
+ # signal an error if there is a problem
+ set -e
+ 
+@@ -116,6 +134,8 @@ if test -z "$repotype" ; then
+   # autodetect repository type
+   if test -d repodata -o -f repomd.xml; then
+     repotype=rpmmd
++  elif test -d media_info/synthesis.hdlist.cz; then
++    repotype=openmandriva
+   elif test_susetags ; then
+     repotype=susetags
+   else
+@@ -272,6 +292,8 @@ elif test "$repotype" = susetags ; then
+   ) | susetags2solv $addautooption -c "${olddir}/content" $parser_options || exit 4
+   test -n "$appdatafile" && rm -f "$appdatafile"
+   cd "$olddir"
++elif test "$repotype" = openmandriva ; then
++  omv_cat media_info/synthesis.hdlist | mdk2solv
+ elif test "$repotype" = plaindir ; then
+   find * -name .\* -prune -o $findopt -name \*.delta.rpm -o -name \*.patch.rpm -o -name \*.rpm -a -type f -print0 | rpms2solv $addautooption -0 -m -
+ else
