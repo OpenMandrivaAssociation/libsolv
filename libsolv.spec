@@ -5,15 +5,15 @@
 %undefine _nonzero_exit_pkgcheck_terminate_build
 ###
 
-%define major 0
+%define major 1
 %define libname %mklibname solv %{major}
 %define extlibname %mklibname solvext %{major}
 %define devname %mklibname solv -d
 
 Summary:	Package dependency solver and repository storage system
 Name:		libsolv
-Version:	0.6.35
-Release:	2
+Version:	0.7.0
+Release:	1
 License:	MIT
 Group:		System/Libraries
 # See also: https://github.com/openSUSE/libsolv
@@ -22,8 +22,6 @@ Source0:	https://github.com/openSUSE/%{name}/archive/%{version}/%{name}-%{versio
 
 # OpenMandriva patch for transitioning from RPM5
 Patch1001:	1001-ext-Ignore-DistEpoch-entirely.patch
-# ARMv8 support https://github.com/openSUSE/libsolv/pull/260
-Patch1002:	https://github.com/openSUSE/libsolv/pull/260/commits/3c2b27fbf1c2e7b2d91c2b43a54dbcdf1771dcb0.patch
 # znver1 support
 Patch1003:	libsolv-0.6.34-znver1.patch
 
