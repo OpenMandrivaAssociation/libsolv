@@ -5,7 +5,7 @@
 
 Summary:	Package dependency solver and repository storage system
 Name:		libsolv
-Version:	0.7.1
+Version:	0.7.2
 Release:	1
 License:	MIT
 Group:		System/Libraries
@@ -115,6 +115,7 @@ Development files (Headers etc.) for %{name}.
 %cmake -GNinja \
 	-DFEDORA=1 \
 	-DWITH_LIBXML2:BOOL=ON \
+	-DWITH_SYSTEM_ZCHUNK:BOOL=ON \
 	-DENABLE_COMPLEX_DEPS:BOOL=ON \
 	-DENABLE_RPMDB_BYRPMHEADER:BOOL=ON \
 	-DENABLE_RPMDB_LIBRPM:BOOL=ON \
