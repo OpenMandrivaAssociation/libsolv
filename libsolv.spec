@@ -6,17 +6,16 @@
 Summary:	Package dependency solver and repository storage system
 Name:		libsolv
 Version:	0.7.2
-Release:	1
+Release:	2
 License:	MIT
 Group:		System/Libraries
 # See also: https://github.com/openSUSE/libsolv
 URL:		http://en.opensuse.org/openSUSE:Libzypp_satsolver
 Source0:	https://github.com/openSUSE/%{name}/archive/%{version}/%{name}-%{version}.tar.gz
 
-# OpenMandriva patch for transitioning from RPM5
-Patch1001:	1001-ext-Ignore-DistEpoch-entirely.patch
-# znver1 support
-Patch1003:	libsolv-0.6.34-znver1.patch
+# OpenMandriva specific patches
+## znver1 support
+Patch1001:	libsolv-0.6.34-znver1.patch
 
 BuildRequires:	cmake
 BuildRequires:	ninja
