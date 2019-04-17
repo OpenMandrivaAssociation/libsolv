@@ -47,7 +47,7 @@ breaking a large problem into smaller, more manageable ones.
 * Make each program do one thing well. See Basics of the Unix Philosophy
   for details.
 * Use shared libraries to share implementations and save disk and memory
-  space 
+  space
 
 Every software package expresses the functionalities it provides to others
 and those it requires from others through dependencies.
@@ -61,12 +61,12 @@ The dependency solver tries to solve dependencies without user intervention
 based on two basic rules
 
 * Fulfill the install/remove requests given at start
-* Keep the (dependencies of the) installed system consistent 
+* Keep the (dependencies of the) installed system consistent
 
 Since the solver treats every package alike, these rules have some major and
 sometimes unexpected implications. A broken dependency might result in
 removal of lots of packages - the resulting system is still consistent
-but highly unusable. 
+but highly unusable.
 
 %package demo
 Summary:	Package dependency solver and repository storage system
