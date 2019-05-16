@@ -6,13 +6,14 @@
 Summary:	Package dependency solver and repository storage system
 Name:		libsolv
 Version:	0.7.4
-Release:	1
+Release:	2
 License:	MIT
 Group:		System/Libraries
 # See also: https://github.com/openSUSE/libsolv
 URL:		http://en.opensuse.org/openSUSE:Libzypp_satsolver
 Source0:	https://github.com/openSUSE/%{name}/archive/%{version}/%{name}-%{version}.tar.gz
-
+# https://github.com/openSUSE/libsolv/issues/312
+Patch0:		0001-solver-Free-favorq-when-running-solver_solve.patch
 # OpenMandriva specific patches
 ## znver1 support
 Patch1001:	libsolv-0.6.34-znver1.patch
@@ -135,6 +136,9 @@ Development files (Headers etc.) for %{name}.
 
 %install
 %ninja_install -C build
+
+%check
+make ARGS=--output-on-failure test
 
 %files
 %{_bindir}/*
