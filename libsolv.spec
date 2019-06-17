@@ -12,8 +12,6 @@ Group:		System/Libraries
 # See also: https://github.com/openSUSE/libsolv
 URL:		http://en.opensuse.org/openSUSE:Libzypp_satsolver
 Source0:	https://github.com/openSUSE/%{name}/archive/%{version}/%{name}-%{version}.tar.gz
-# https://github.com/openSUSE/libsolv/issues/312
-Patch0:		0001-solver-Free-favorq-when-running-solver_solve.patch
 # OpenMandriva specific patches
 ## znver1 support
 Patch1001:	libsolv-0.6.34-znver1.patch
