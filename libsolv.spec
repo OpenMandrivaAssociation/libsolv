@@ -5,7 +5,7 @@
 
 Summary:	Package dependency solver and repository storage system
 Name:		libsolv
-Version:	0.7.6
+Version:	0.7.7
 Release:	1
 License:	MIT
 Group:		System/Libraries
@@ -142,9 +142,11 @@ make ARGS=--output-on-failure test
 %{_bindir}/*
 %exclude %{_bindir}/solv
 %{_mandir}/man1/*
+%exclude %{_mandir}/man1/solv.1*
 
 %files demo
 %{_bindir}/solv
+%{_mandir}/man1/solv.1*
 
 %files -n %{libname}
 %{_libdir}/libsolv.so.%{major}
