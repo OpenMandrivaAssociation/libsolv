@@ -1,0 +1,40 @@
+From cea2f345d653f161961876a3d5fdeb0b498758ad Mon Sep 17 00:00:00 2001
+From: Michael Schroeder <mls@suse.de>
+Date: Tue, 22 Oct 2019 14:16:11 +0200
+Subject: [PATCH 6/8] Move marker argument in solvable_matchessolvable()
+
+This makes it similar to the pool_whatmatchessolvable() function.
+---
+ src/solvable.c | 2 +-
+ src/solvable.h | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/src/solvable.c b/src/solvable.c
+index 332e6747..474e6f5b 100644
+--- a/src/solvable.c
++++ b/src/solvable.c
+@@ -720,7 +720,7 @@ solvable_matchessolvable_int(Solvable *s, Id keyname, int marker, Id solvid, Map
+ }
+ 
+ int
+-solvable_matchessolvable(Solvable *s, Id keyname, int marker, Id solvid, Queue *depq)
++solvable_matchessolvable(Solvable *s, Id keyname, Id solvid, Queue *depq, int marker)
+ {
+   Pool *pool = s->repo->pool;
+   Map missc;		/* cache for misses */
+diff --git a/src/solvable.h b/src/solvable.h
+index d5258f2c..7788e7c7 100644
+--- a/src/solvable.h
++++ b/src/solvable.h
+@@ -81,7 +81,7 @@ int solvable_identical(Solvable *s1, Solvable *s2);
+ Id solvable_selfprovidedep(Solvable *s);
+ 
+ int solvable_matchesdep(Solvable *s, Id keyname, Id dep, int marker);
+-int solvable_matchessolvable(Solvable *s, Id keyname, int marker, Id solvid, Queue *depq);
++int solvable_matchessolvable(Solvable *s, Id keyname, Id solvid, Queue *depq, int marker);
+ 
+ /* internal */
+ int solvable_matchessolvable_int(Solvable *s, Id keyname, int marker, Id solvid, Map *solvidmap, Queue *depq, Map *missc, int reloff, Queue *outdepq);
+-- 
+2.24.0
+

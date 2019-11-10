@@ -1,0 +1,60 @@
+From ea037722b0f2a1afc8416e08b36fd498a8bb14c4 Mon Sep 17 00:00:00 2001
+From: Michael Schroeder <mls@suse.de>
+Date: Mon, 21 Oct 2019 14:52:31 +0200
+Subject: [PATCH 4/8] Add workaround to stat_database() to find other database
+ backends
+
+This is pretty horrible. Rpm upstream wants to add a function
+that stats the database for us, so we may use that in some future
+version.
+---
+ ext/repo_rpmdb_librpm.h | 31 ++++++++++++++++++++++++-------
+ 1 file changed, 24 insertions(+), 7 deletions(-)
+
+diff --git a/ext/repo_rpmdb_librpm.h b/ext/repo_rpmdb_librpm.h
+index 64e795d2..6fdcfb0d 100644
+--- a/ext/repo_rpmdb_librpm.h
++++ b/ext/repo_rpmdb_librpm.h
+@@ -33,15 +33,32 @@ struct rpmdbstate {
+ static int
+ stat_database(struct rpmdbstate *state, struct stat *statbuf)
+ {
+-  char *dbpath;
+-  dbpath = solv_dupjoin(state->rootdir, state->is_ostree ? "/usr/share/rpm/" : "/var/lib/rpm/", "Packages");
+-  if (stat(dbpath, statbuf))
++  static const char *dbname[] = {
++    "Packages",
++    "Packages.db",
++    "rpmdb.sqlite",
++    "data.mdb",
++    "Packages",		/* for error reporting */
++    0,
++  };
++  int i;
++
++  for (i = 0; ; i++)
+     {
+-      pool_error(state->pool, -1, "%s: %s", dbpath, strerror(errno));
+-      free(dbpath);
+-      return -1;
++      char *dbpath = solv_dupjoin(state->rootdir, state->is_ostree ? "/usr/share/rpm/" : "/var/lib/rpm/", dbname[i]);
++      if (!stat(dbpath, statbuf))
++	{
++	  free(dbpath);
++	  return 0;
++	}
++      if (errno != ENOENT || !dbname[i + 1])
++	{
++	  pool_error(state->pool, -1, "%s: %s", dbpath, strerror(errno));
++	  solv_free(dbpath);
++	  return -1;
++	}
++      solv_free(dbpath);
+     }
+-  free(dbpath);
+   return 0;
+ }
+ 
+-- 
+2.24.0
+

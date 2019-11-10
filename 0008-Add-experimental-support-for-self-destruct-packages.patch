@@ -1,0 +1,83 @@
+From 25356d16b4520d716e64c8f9506ef4d00b343c63 Mon Sep 17 00:00:00 2001
+From: Michael Schroeder <mls@suse.de>
+Date: Fri, 8 Nov 2019 15:09:54 +0100
+Subject: [PATCH 8/8] Add experimental support for self-destruct packages
+
+Self-destruct packages will not be part of the transaction. But
+they still will obsolete packages, thus updating to a self-destruct
+package will lead to the erasure of the old package.
+---
+ src/knownid.h     |  2 ++
+ src/transaction.c | 15 ++++++++++++++-
+ 2 files changed, 16 insertions(+), 1 deletion(-)
+
+diff --git a/src/knownid.h b/src/knownid.h
+index 7da12396..3a88ee26 100644
+--- a/src/knownid.h
++++ b/src/knownid.h
+@@ -263,6 +263,8 @@ KNOWNID(SOLVABLE_BUILDFLAVOR,		"solvable:buildflavor"),	/* conda */
+ 
+ KNOWNID(UPDATE_STATUS,			"update:status"),		/* "stable", "testing", ...*/
+ 
++KNOWNID(LIBSOLV_SELF_DESTRUCT_PKG,      "libsolv-self-destruct-pkg()"),	/* this package will self-destruct on installation */
++
+ KNOWNID(ID_NUM_INTERNAL,		0)
+ 
+ #ifdef KNOWNID_INITIALIZE
+diff --git a/src/transaction.c b/src/transaction.c
+index 4a4189eb..fb2cc9aa 100644
+--- a/src/transaction.c
++++ b/src/transaction.c
+@@ -646,6 +646,8 @@ create_transaction_info(Transaction *trans, Queue *decisionq)
+       s = pool->solvables + p;
+       if (!s->repo || s->repo == installed)
+ 	continue;
++      if (!MAPTST(&trans->transactsmap, p))
++	continue;
+       multi = trans->multiversionmap.size && MAPTST(&trans->multiversionmap, p);
+       FOR_PROVIDES(p2, pp2, s->name)
+ 	{
+@@ -726,9 +728,10 @@ transaction_create_decisionq(Pool *pool, Queue *decisionq, Map *multiversionmap)
+ {
+   Repo *installed = pool->installed;
+   int i, needmulti;
+-  Id p;
++  Id p, pp;
+   Solvable *s;
+   Transaction *trans;
++  Map selfdestructmap;
+ 
+   trans = transaction_create(pool);
+   if (multiversionmap && !multiversionmap->size)
+@@ -736,6 +739,13 @@ transaction_create_decisionq(Pool *pool, Queue *decisionq, Map *multiversionmap)
+   queue_empty(&trans->steps);
+   map_init(&trans->transactsmap, pool->nsolvables);
+   needmulti = 0;
++  map_init(&selfdestructmap, 0);
++  FOR_PROVIDES(p, pp, LIBSOLV_SELF_DESTRUCT_PKG)
++    {
++      if (!selfdestructmap.size)
++	map_grow(&selfdestructmap, pool->nsolvables);
++      MAPSET(&selfdestructmap, p);
++    }
+   for (i = 0; i < decisionq->count; i++)
+     {
+       p = decisionq->elements[i];
+@@ -746,11 +756,14 @@ transaction_create_decisionq(Pool *pool, Queue *decisionq, Map *multiversionmap)
+ 	MAPSET(&trans->transactsmap, -p);
+       if (!(installed && s->repo == installed) && p > 0)
+ 	{
++	  if (selfdestructmap.size && MAPTST(&selfdestructmap, p))
++	    continue;
+ 	  MAPSET(&trans->transactsmap, p);
+ 	  if (multiversionmap && MAPTST(multiversionmap, p))
+ 	    needmulti = 1;
+ 	}
+     }
++  map_free(&selfdestructmap);
+   MAPCLR(&trans->transactsmap, SYSTEMSOLVABLE);
+   if (needmulti)
+     map_init_clone(&trans->multiversionmap, multiversionmap);
+-- 
+2.24.0
+

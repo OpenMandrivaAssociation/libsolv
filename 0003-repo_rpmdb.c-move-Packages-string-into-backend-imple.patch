@@ -1,0 +1,87 @@
+From 94df5d6bf2eec3fc555550307342e250e2b842c6 Mon Sep 17 00:00:00 2001
+From: Michael Schroeder <mls@suse.de>
+Date: Mon, 21 Oct 2019 13:17:29 +0200
+Subject: [PATCH 3/8] repo_rpmdb.c: move "Packages" string into backend
+ implementations
+
+Other rpm database implementations like "ndb" use different names.
+---
+ ext/repo_rpmdb.c        |  2 +-
+ ext/repo_rpmdb_bdb.h    | 11 +++++++++--
+ ext/repo_rpmdb_librpm.h |  7 +++----
+ 3 files changed, 13 insertions(+), 7 deletions(-)
+
+diff --git a/ext/repo_rpmdb.c b/ext/repo_rpmdb.c
+index fb1491b1..e49188db 100644
+--- a/ext/repo_rpmdb.c
++++ b/ext/repo_rpmdb.c
+@@ -1605,7 +1605,7 @@ repo_add_rpmdb(Repo *repo, Repo *ref, int flags)
+     }
+ 
+   /* XXX: should get ro lock of Packages database! */
+-  if (stat_database(&state, "Packages", &packagesstat, 1))
++  if (stat_database(&state, &packagesstat))
+     {
+       freestate(&state);
+       return -1;
+diff --git a/ext/repo_rpmdb_bdb.h b/ext/repo_rpmdb_bdb.h
+index ae477f76..574e9a8d 100644
+--- a/ext/repo_rpmdb_bdb.h
++++ b/ext/repo_rpmdb_bdb.h
+@@ -57,7 +57,7 @@ struct rpmdbstate {
+ 
+ 
+ static int
+-stat_database(struct rpmdbstate *state, char *dbname, struct stat *statbuf, int seterror)
++stat_database_name(struct rpmdbstate *state, char *dbname, struct stat *statbuf, int seterror)
+ {
+   char *dbpath;
+   dbpath = solv_dupjoin(state->rootdir, state->is_ostree ? "/usr/share/rpm/" : "/var/lib/rpm/", dbname);
+@@ -72,6 +72,13 @@ stat_database(struct rpmdbstate *state, char *dbname, struct stat *statbuf, int
+   return 0;
+ }
+ 
++static int
++stat_database(struct rpmdbstate *state, struct stat *statbuf)
++{
++  return stat_database_name(state, "Packages", statbuf, 1);
++}
++
++
+ static inline Id
+ db2rpmdbid(unsigned char *db, int byteswapped)
+ {
+@@ -426,7 +433,7 @@ count_headers(struct rpmdbstate *state)
+   DBT dbkey;
+   DBT dbdata;
+ 
+-  if (stat_database(state, "Name", &statbuf, 0))
++  if (stat_database_name(state, "Name", &statbuf, 0))
+     return 0;
+   memset(&dbkey, 0, sizeof(dbkey));
+   memset(&dbdata, 0, sizeof(dbdata));
+diff --git a/ext/repo_rpmdb_librpm.h b/ext/repo_rpmdb_librpm.h
+index 79983d3a..64e795d2 100644
+--- a/ext/repo_rpmdb_librpm.h
++++ b/ext/repo_rpmdb_librpm.h
+@@ -31,14 +31,13 @@ struct rpmdbstate {
+ };
+ 
+ static int
+-stat_database(struct rpmdbstate *state, char *dbname, struct stat *statbuf, int seterror)
++stat_database(struct rpmdbstate *state, struct stat *statbuf)
+ {
+   char *dbpath;
+-  dbpath = solv_dupjoin(state->rootdir, state->is_ostree ? "/usr/share/rpm/" : "/var/lib/rpm/", dbname);
++  dbpath = solv_dupjoin(state->rootdir, state->is_ostree ? "/usr/share/rpm/" : "/var/lib/rpm/", "Packages");
+   if (stat(dbpath, statbuf))
+     {
+-      if (seterror)
+-        pool_error(state->pool, -1, "%s: %s", dbpath, strerror(errno));
++      pool_error(state->pool, -1, "%s: %s", dbpath, strerror(errno));
+       free(dbpath);
+       return -1;
+     }
+-- 
+2.24.0
+
