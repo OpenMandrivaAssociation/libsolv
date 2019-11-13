@@ -12,16 +12,6 @@ Group:		System/Libraries
 # See also: https://github.com/openSUSE/libsolv
 URL:		http://en.opensuse.org/openSUSE:Libzypp_satsolver
 Source0:	https://github.com/openSUSE/%{name}/archive/%{version}/%{name}-%{version}.tar.gz
-# Patches from git master
-# libzypp needs solvable_matchessolvable (added in Patch4)
-Patch0:		0001-Parse-the-patch-status-in-the-updateinfo-xml.patch
-Patch1:		0002-Add-UPDATE_STATUS-to-knownids.patch
-Patch2:		0003-repo_rpmdb.c-move-Packages-string-into-backend-imple.patch
-Patch3:		0004-Add-workaround-to-stat_database-to-find-other-databa.patch
-Patch4:		0005-Add-solvable_matchessolvable-function.patch
-Patch5:		0006-Move-marker-argument-in-solvable_matchessolvable.patch
-Patch6:		0007-Add-support-for-blacklisted-packages.patch
-Patch7:		0008-Add-experimental-support-for-self-destruct-packages.patch
 # OpenMandriva specific patches
 ## znver1 support
 Patch1001:	libsolv-0.6.34-znver1.patch
