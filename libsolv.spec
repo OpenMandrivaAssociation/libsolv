@@ -6,7 +6,7 @@
 Summary:	Package dependency solver and repository storage system
 Name:		libsolv
 Version:	0.7.10
-Release:	1
+Release:	2
 License:	MIT
 Group:		System/Libraries
 # See also: https://github.com/openSUSE/libsolv
@@ -125,8 +125,6 @@ Development files (Headers etc.) for %{name}.
 	-DENABLE_COMPS:BOOL=ON \
 	-DENABLE_APPDATA:BOOL=ON \
 	-DENABLE_HELIXREPO:BOOL=ON \
-	-DENABLE_RPMDB:BOOL=ON \
-	-DENABLE_COMPLEX_DEPS:BOOL=ON \
 	-DENABLE_SUSEREPO:BOOL=ON
 
 %build
