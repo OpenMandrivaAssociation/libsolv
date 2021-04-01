@@ -9,7 +9,7 @@
 Summary:	Package dependency solver and repository storage system
 Name:		libsolv
 Version:	0.7.18
-Release:	2
+Release:	3
 License:	MIT
 Group:		System/Libraries
 # See also: https://github.com/openSUSE/libsolv
@@ -83,7 +83,6 @@ Applications demoing the %{name} library.
 %package -n %{libname}
 Summary:	Package dependency solver and repository storage system
 Group:		System/Libraries
-Requires:	%{name} = %{EVRD}
 
 %description -n %{libname}
 Package dependency solver and repository storage system.
