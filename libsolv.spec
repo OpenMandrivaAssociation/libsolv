@@ -1,3 +1,6 @@
+# (tpg) reduce bloat by excluding cmake requires on devel packages
+%global __requires_exclude ^cmake.*$
+
 %define major 1
 %define libname %mklibname solv %{major}
 %define extlibname %mklibname solvext %{major}
@@ -6,7 +9,7 @@
 Summary:	Package dependency solver and repository storage system
 Name:		libsolv
 Version:	0.7.18
-Release:	1
+Release:	2
 License:	MIT
 Group:		System/Libraries
 # See also: https://github.com/openSUSE/libsolv
