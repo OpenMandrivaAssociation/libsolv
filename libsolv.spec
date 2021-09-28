@@ -8,7 +8,7 @@
 
 Summary:	Package dependency solver and repository storage system
 Name:		libsolv
-Version:	0.7.19
+Version:	0.7.20
 Release:	1
 License:	MIT
 Group:		System/Libraries
