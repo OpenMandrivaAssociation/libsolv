@@ -8,7 +8,7 @@
 
 Summary:	Package dependency solver and repository storage system
 Name:		libsolv
-Version:	0.7.20
+Version:	0.7.21
 Release:	1
 License:	MIT
 Group:		System/Libraries
@@ -141,12 +141,12 @@ make ARGS=--output-on-failure test
 %files
 %{_bindir}/*
 %exclude %{_bindir}/solv
-%{_mandir}/man1/*
+%doc %{_mandir}/man1/*
 %exclude %{_mandir}/man1/solv.1*
 
 %files demo
 %{_bindir}/solv
-%{_mandir}/man1/solv.1*
+%doc %{_mandir}/man1/solv.1*
 
 %files -n %{libname}
 %{_libdir}/libsolv.so.%{major}
@@ -160,4 +160,4 @@ make ARGS=--output-on-failure test
 %{_libdir}/pkgconfig/libsolvext.pc
 %{_libdir}/*.so
 %{_datadir}/cmake/Modules/FindLibSolv.cmake
-%{_mandir}/man3/*
+%doc %{_mandir}/man3/*
