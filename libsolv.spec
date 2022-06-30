@@ -9,7 +9,7 @@
 Summary:	Package dependency solver and repository storage system
 Name:		libsolv
 Version:	0.7.22
-Release:	1
+Release:	2
 License:	MIT
 Group:		System/Libraries
 # See also: https://github.com/openSUSE/libsolv
@@ -30,9 +30,11 @@ BuildRequires:	pkgconfig(libzstd)
 BuildRequires:	pkgconfig(libxml-2.0)
 BuildRequires:	pkgconfig(zck)
 BuildConflicts:	pkgconfig(rpm) >= 5
-Requires:	gzip
-Requires:	bzip2
+Requires:	pigz
+Requires:	pbzip2
 Requires:	xz
+Requires:	zchunk
+Requires:	zstd
 Requires:	coreutils
 Requires:	findutils
 
