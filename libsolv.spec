@@ -8,8 +8,8 @@
 
 Summary:	Package dependency solver and repository storage system
 Name:		libsolv
-Version:	0.7.22
-Release:	2
+Version:	0.7.23
+Release:	1
 License:	MIT
 Group:		System/Libraries
 # See also: https://github.com/openSUSE/libsolv
