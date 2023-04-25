@@ -8,8 +8,8 @@
 
 Summary:	Package dependency solver and repository storage system
 Name:		libsolv
-Version:	0.7.23
-Release:	2
+Version:	0.7.24
+Release:	1
 License:	MIT
 Group:		System/Libraries
 # See also: https://github.com/openSUSE/libsolv
@@ -119,6 +119,8 @@ Development files (Headers etc.) for %{name}.
 	-DWITH_LIBXML2:BOOL=ON \
 	-DWITH_SYSTEM_ZCHUNK:BOOL=ON \
 	-DENABLE_COMPLEX_DEPS:BOOL=ON \
+	-DENABLE_RPMMD=ON \
+	-DENABLE_RPMDB=ON \
 	-DENABLE_RPMDB_BYRPMHEADER:BOOL=ON \
 	-DENABLE_RPMDB_LIBRPM:BOOL=ON \
 	-DENABLE_RPMPKG_LIBRPM:BOOL=ON \
