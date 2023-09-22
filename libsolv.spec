@@ -131,7 +131,8 @@ Development files (Headers etc.) for %{name}.
 	-DENABLE_COMPS:BOOL=ON \
 	-DENABLE_APPDATA:BOOL=ON \
 	-DENABLE_HELIXREPO:BOOL=ON \
-	-DENABLE_SUSEREPO:BOOL=ON
+	-DENABLE_SUSEREPO:BOOL=ON \
+	-DPKG_CONFIG_EXECUTABLE:FILEPATH=%{_bindir}/pkg-config
 
 %build
 %ninja_build -C build
