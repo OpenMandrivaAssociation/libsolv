@@ -2,8 +2,10 @@
 %global __requires_exclude ^cmake.*$
 
 %define major 1
-%define libname %mklibname solv %{major}
-%define extlibname %mklibname solvext %{major}
+%define oldlibname %mklibname solv 1
+%define libname %mklibname solv
+%define oldextlibname %mklibname solvext 1
+%define extlibname %mklibname solvext
 %define devname %mklibname solv -d
 
 Summary:	Package dependency solver and repository storage system
@@ -18,6 +20,7 @@ Source0:	https://github.com/openSUSE/%{name}/archive/%{version}/%{name}-%{versio
 # OpenMandriva specific patches
 ## znver1 support
 Patch1001:	libsolv-0.6.34-znver1.patch
+Patch1002:	libsolv-fix-versionscript-check.patch
 
 BuildRequires:	cmake
 BuildRequires:	ninja
@@ -85,6 +88,7 @@ Applications demoing the %{name} library.
 %package -n %{libname}
 Summary:	Package dependency solver and repository storage system
 Group:		System/Libraries
+%rename %{oldlibname}
 
 %description -n %{libname}
 Package dependency solver and repository storage system.
@@ -92,6 +96,7 @@ Package dependency solver and repository storage system.
 %package -n %{extlibname}
 Summary:	Package dependency solver and repository storage system
 Group:		System/Libraries
+%rename %{oldextlibname}
 
 %description -n %{extlibname}
 Package dependency solver and repository storage system.

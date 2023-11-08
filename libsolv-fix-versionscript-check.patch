@@ -1,0 +1,36 @@
+diff -up libsolv-0.7.26/CMakeLists.txt.omv~ libsolv-0.7.26/CMakeLists.txt
+--- libsolv-0.7.26/CMakeLists.txt.omv~	2023-11-08 14:52:44.233259988 +0100
++++ libsolv-0.7.26/CMakeLists.txt	2023-11-08 14:53:09.759502758 +0100
+@@ -280,7 +280,7 @@ MACRO (check_linker_flag FLAG VAR)
+ 	CMAKE_POP_CHECK_STATE ()
+ ENDMACRO (check_linker_flag)
+ check_linker_flag("-Wl,--as-needed" HAVE_LINKER_AS_NEEDED)
+-check_linker_flag("-Wl,--version-script=${CMAKE_SOURCE_DIR}/src/libsolv.ver" HAVE_LINKER_VERSION_SCRIPT)
++check_linker_flag("-Wl,--undefined-version -Wl,--version-script=${CMAKE_SOURCE_DIR}/src/libsolv.ver" HAVE_LINKER_VERSION_SCRIPT)
+ ELSE (${CMAKE_MAJOR_VERSION} GREATER 2)
+ SET (HAVE_LINKER_AS_NEEDED 1)
+ SET (HAVE_LINKER_VERSION_SCRIPT 1)
+diff -up libsolv-0.7.26/ext/CMakeLists.txt.omv~ libsolv-0.7.26/ext/CMakeLists.txt
+--- libsolv-0.7.26/ext/CMakeLists.txt.omv~	2023-11-08 14:55:25.550788574 +0100
++++ libsolv-0.7.26/ext/CMakeLists.txt	2023-11-08 14:55:38.720912831 +0100
+@@ -148,7 +148,7 @@ IF (NOT MSVC)
+ SET (CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fPIC")
+ ENDIF (NOT MSVC)
+ IF (HAVE_LINKER_VERSION_SCRIPT)
+-SET (CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} ${LINK_FLAGS} -Wl,--version-script=${CMAKE_SOURCE_DIR}/ext/libsolvext.ver")
++    SET (CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} ${LINK_FLAGS} -Wl,--undefined-version -Wl,--version-script=${CMAKE_SOURCE_DIR}/ext/libsolvext.ver")
+ ENDIF (HAVE_LINKER_VERSION_SCRIPT)
+ 
+ IF (DISABLE_SHARED)
+diff -up libsolv-0.7.26/src/CMakeLists.txt.omv~ libsolv-0.7.26/src/CMakeLists.txt
+--- libsolv-0.7.26/src/CMakeLists.txt.omv~	2023-11-08 14:55:46.860989595 +0100
++++ libsolv-0.7.26/src/CMakeLists.txt	2023-11-08 14:55:55.712073033 +0100
+@@ -44,7 +44,7 @@ IF (WIN32)
+ ENDIF (WIN32)
+ 
+ IF (HAVE_LINKER_VERSION_SCRIPT)
+-SET (CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} ${LINK_FLAGS} -Wl,--version-script=${CMAKE_SOURCE_DIR}/src/libsolv.ver")
++    SET (CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} ${LINK_FLAGS} -Wl,--undefined-version -Wl,--version-script=${CMAKE_SOURCE_DIR}/src/libsolv.ver")
+ ENDIF (HAVE_LINKER_VERSION_SCRIPT)
+ 
+ IF (DISABLE_SHARED)
