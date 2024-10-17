@@ -15,7 +15,7 @@ Release:	1
 License:	MIT
 Group:		System/Libraries
 # See also: https://github.com/openSUSE/libsolv
-URL:		http://en.opensuse.org/openSUSE:Libzypp_satsolver
+URL:		https://en.opensuse.org/openSUSE:Libzypp_satsolver
 Source0:	https://github.com/openSUSE/%{name}/archive/%{version}/%{name}-%{version}.tar.gz
 # OpenMandriva specific patches
 ## znver1 support
